@@ -1,0 +1,122 @@
+---
+title: "Final Project"
+subtitle: "Data Science for Biologists, Spring 2021"
+author: "Alex Bastardi"
+output: 
+  prettydoc::html_pretty:
+    theme: hpstr
+    highlight: vignette
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+# DON'T CHANGE THE NEXT LINE, except to add NEW options if you have any.
+knitr::opts_chunk$set(warning=FALSE, message=FALSE, echo = TRUE, include = TRUE)
+
+# Load all libraries you use HERE:
+library(tidyverse)
+school_diversity <- readr::read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2019/2019-09-24/school_diversity.csv")
+
+```
+
+<br><br>
+
+## Introduction
+
+```{r read-examine-data}
+head(school_diversity)
+glimpse(school_diversity)
+```
+
+<br><br>
+
+## Question 1
+
+#### Is there a difference in the level of integration of schools between the school years 1994-1995 and 2016-2017?
+
+### Methods
+```{r wrangle and plot 1}
+school_diversity %>%
+  select(ST, SCHOOL_YEAR, diverse, int_group) %>%
+  drop_na() %>%
+  ggplot() +
+  geom_bar() +
+  aes( x= int_group, fill=SCHOOL_YEAR) +
+  scale_color_brewer(palette = "Set2") + #changing color palette
+  theme(legend.position = "bottom") +
+  labs(x= "Level of Integration", y= "Count")-> wrangle1 #moving the legend location
+print(wrangle1)
+
+```
+
+### Answer
+
+Yes it appears the school year 2016-2017 has more highly integrated districts than in 1994-1995. Not integrated districts remained relatively the same between the 2 school years.
+
+<br><br>
+
+## Question 2
+
+#### For school districts in NJ and NY, does the white proportion of student population differ between school years 1994-1995 and 2016-2017?
+
+### Methods
+```{r wrangle and plot 2}
+school_diversity %>%
+  filter( ST %in% c("NJ", "NY")) %>% #filtering states to NJ and NY
+  select(ST, SCHOOL_YEAR, White) %>% #looking at only these 3 columns
+  drop_na() %>%
+  ggplot() +
+  geom_violin(fill="grey") + #creating a violin plot
+  aes(y= White, x=SCHOOL_YEAR) +
+  theme_minimal() +
+  labs( x=" School Year", y= "White proportion of student population")-> wrangle2
+print(wrangle2)
+```
+
+### Answer
+
+Yes, some school districts in NJ and NY had a lower white proportion of student population in 2016-2017 compared to 1994-1995.
+<br><br>
+
+## Question 3
+
+#### Of the 6 New England states, which has the district with the highest Black porportion of student population?
+
+### Methods
+```{r wrangle and plot 3}
+school_diversity %>%
+  filter( ST %in% c("CT", "ME", "MA", "NH", "RI")) %>% #filtering states to New England area
+  ggplot() +
+  geom_boxplot(fill= "hotpink") +
+  aes(x= ST, y=Black) +
+  theme_minimal() +
+labs(x="State", y= "Black proportion of student population")-> wrangle3 #labeling plot
+print(wrangle3)
+```
+
+### Answer
+
+A school district in Connecticut has the highest Black proportion of student population.
+
+<br><br>
+
+## Question 4
+
+#### In the Philadelphia metropolitan area (NJ, DE, PA), which state has the district with the highest Asian porportion of student population?
+
+### Methods
+```{r wrangle and plot 4}
+school_diversity %>%
+  filter( ST %in% c("PA", "NJ", "DE")) %>% #filtering states to philly metropolitan area
+  ggplot() +
+  geom_boxplot(fill="blue", color="grey") + #changing color and fill to be aesthetically pleasing
+  aes(x= ST, y=Asian) +
+  theme_classic() +
+  labs(x="State", y= "Asian proportion of student population") -> wrangle4
+print(wrangle4)
+```
+
+### Answer
+
+In the Philadelphia metropolitan area, NJ has the school district with the highest Asian proportion of student population.
