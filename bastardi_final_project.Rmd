@@ -24,6 +24,10 @@ school_diversity <- readr::read_csv("https://raw.githubusercontent.com/rfordatas
 
 ## Introduction
 
+This data compiled statistics from different public schools in the country. The data is from data The Washington Post courtesy of Kate Rabinowitz, Laura Meckler, and Armand Emamdjomeh. Diversity was defined by the proportion of students in the dominant racial group. Diverse districts are places where fewer than 75 percent of students are of the same race. Undiverse districts are where 75 to 90 percent of students are the same race. In extremely undiverse districts one racial group constitutes more than 90 percent of students. 
+
+[School Diversity](https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2019/2019-09-24/school_diversity.csv)
+
 ```{r read-examine-data}
 head(school_diversity)
 glimpse(school_diversity)
@@ -108,7 +112,7 @@ A school district in Connecticut has the highest Black proportion of student pop
 ### Methods
 ```{r wrangle and plot 4}
 school_diversity %>%
-  filter( ST %in% c("PA", "NJ", "DE")) %>% #filtering states to philly metropolitan area
+  filter( ST %in% c("PA", "NJ", "DE")) %>% #filtering states to philadelphia metropolitan area
   ggplot() +
   geom_boxplot(fill="blue", color="grey") + #changing color and fill to be aesthetically pleasing
   aes(x= ST, y=Asian) +
